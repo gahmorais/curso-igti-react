@@ -18,11 +18,19 @@ window.addEventListener("load", () => {
   inputDate.onchange = onInputDate;
   doFetchCountriesCovid();
   doFetchSummaryAllCountries();
+  loadPageWithSelectOption()
 });
 
 function render() {
   populateSelectCountries();
 }
+
+function loadPageWithSelectOption(){
+  const index = selectCountries.selectedIndex
+  const currentCountry = selectCountries.options[index].textContent
+}
+
+
 async function doFetchCountriesCovid() {
   try {
     const data = await fetch("https://api.covid19api.com/countries");
@@ -55,6 +63,10 @@ function populateSelectCountries() {
   selectCountries.innerHTML += optionsCoutriesHTML;
 }
 
+function onLoadSelect(e){
+  console.log("TESTE")
+}
+
 function onSelectedCountry(e) {
   const selectedCountry = e.target.value;
   const { Countries } = allDataFromAllCountries;
@@ -65,12 +77,14 @@ function onSelectedCountry(e) {
 }
 
 async function onInputDate(e){
-  const index = selectCountries.selectedIndex
-  const currentCountry = selectCountries.options[index].textContent
-  const currentDay = '2021-05-25T19:51:51.609Z'
-  const lastDay = e.target.value
-  const fetchDay = await fetch(`https://api.covid19api.com/country/${currentCountry}?from=${lastDay}T00:00:00Z&to=${currentDay}T00:00:00Z`)
-  const json = await fetchDay.json()
+  // const index = selectCountries.selectedIndex
+  // const oneDay = 86400000
+  // const selectedDay = new Date(e.target.valueAsNumber + oneDay*2)
+  // const previousDay = new Date(selectedDay - oneDay).toISOString()
+  // const currentCountry = selectCountries.options[index].textContent
+  // const fetchDay = await fetch(`https://api.covid19api.com/country/${currentCountry}?from=${previousDay}T00:00:00Z&to=${selectedDay}T00:00:00Z`)
+  // const json = await fetchDay.json()
+  // console.log(json)
 
 }
 
