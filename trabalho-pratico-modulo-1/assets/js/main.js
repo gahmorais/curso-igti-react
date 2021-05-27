@@ -62,7 +62,6 @@ function populateComboCountries() {
 function showGlobalInfo() {
   const { TotalConfirmed, TotalDeaths, TotalRecovered } =
     allDataFromAllCountries.Global;
-  console.log(TotalConfirmed, TotalDeaths, TotalRecovered);
   confirmed.textContent = formatToBrazilianPattern(TotalConfirmed);
   death.textContent = formatToBrazilianPattern(TotalDeaths);
   recovered.textContent = formatToBrazilianPattern(TotalRecovered);
@@ -144,8 +143,26 @@ async function fetchDiaryCountryInfo(country, endDate, startDate) {
   );
 
   const dailyInfo = await fetchDay.json();
-  console.log(dailyInfo);
+  if (dailyInfo.length > 1) {
+    const provinces = dailyInfo.sort((a, b) =>
+      a.Province > b.Province ? 1 : a.Province < b.Province ? -1 : 0
+    );
+    calculateDeltaProvincesForKPIs(provinces);
+  }
   calculateDeltaForKPIs(dailyInfo);
+}
+
+function calculateDeltaProvincesForKPIs(provinces) {
+  let lastProvince = "";
+  let currentProvince = ''
+  for (let i = 0; i < provinces.length; i++) {
+    currentProvince = `${provinces[i].Province}`
+    if(lastProvince !== currentProvince){
+      lastProvince = currentProvince
+      console.log(lastProvince)
+    }
+    
+  }
 }
 
 function calculateDeltaForKPIs(dailyInfo) {
@@ -153,13 +170,11 @@ function calculateDeltaForKPIs(dailyInfo) {
   const yDeathDelta = dailyInfo[1].Deaths - dailyInfo[0].Deaths;
   const yRecoveredDelta = dailyInfo[1].Recovered - dailyInfo[0].Recovered;
   const yActiveDelta = dailyInfo[1].Active - dailyInfo[0].Active;
-  console.log(yConfirmedDelta, yDeathDelta, yRecoveredDelta, yActiveDelta);
 
   const tConfirmedDelta = dailyInfo[2].Confirmed - dailyInfo[1].Confirmed;
   const tDeathDelta = dailyInfo[2].Deaths - dailyInfo[1].Deaths;
   const tRecoveredDelta = dailyInfo[2].Recovered - dailyInfo[1].Recovered;
   const tActiveDelta = dailyInfo[2].Active - dailyInfo[1].Active;
-  console.log(tConfirmedDelta, tDeathDelta, tRecoveredDelta, tActiveDelta);
 
   insertDailyData(
     tconfirmed,
@@ -184,7 +199,6 @@ function compareValue(today, yesterday) {
 }
 
 function insertDailyData(element, value, increase) {
-  console.log(increase);
   if (increase) {
     element.innerHTML = `<img src='./assets/img/down.png'/> Diário: ${formatToBrazilianPattern(
       value
