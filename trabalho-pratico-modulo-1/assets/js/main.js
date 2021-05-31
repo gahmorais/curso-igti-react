@@ -121,7 +121,6 @@ function renderCountryInfo(country) {
 async function onInputDate(e) {
   const index = combo.selectedIndex;
   const country = combo.options[index].textContent;
-  console.log(country);
 
   if (country === "Global") {
     window.alert("Por favor selecione um país");
@@ -154,14 +153,24 @@ async function fetchDiaryCountryInfo(country, endDate, startDate) {
 
 function calculateDeltaProvincesForKPIs(provinces) {
   let lastProvince = "";
-  let currentProvince = ''
-  for (let i = 0; i < provinces.length; i++) {
-    currentProvince = `${provinces[i].Province}`
-    if(lastProvince !== currentProvince){
-      lastProvince = currentProvince
-      console.log(lastProvince)
-    }
-    
+  let currentProvince = "";
+  let provinceObj = {
+    Deaths: '',
+    Active: '',
+    Recovered: '',
+    Confirmed: ''
+  }
+  for (let i = 0; i < provinces.length; i+=3) {
+    currentProvince = `${provinces[i].Province}`;
+    console.log(currentProvince)
+    // if (lastProvince !== currentProvince) {
+    //   lastProvince = currentProvince;
+      
+
+    //   console.log(i, " - Nova Provincia", provinces[i]);
+    // } else {
+    //   console.log("Mesma Provincia", provinces[i]);
+    // }
   }
 }
 
