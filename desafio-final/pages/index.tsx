@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import ChampionshipTable from "../components/ChampionshipTable";
 import Select from "../components/Select";
-import { read } from "../services/api/FetchData";
+import { IRounds, read } from "../services/api/FetchData";
 
 export interface ITeamsData {
   team: string;
@@ -33,7 +33,6 @@ export default function Home() {
   const [championshipYears, setChampionshipYears] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>("2003");
   const [teamsData, setTeamsData] = useState<ITeamsData[] | null>(null);
-
   function handleChange(year: string) {
     setSelectedYear(year);
   }
@@ -49,9 +48,9 @@ export default function Home() {
     (async () => {
       const data = await read(selectedYear);
       let quantityRounds = data.length;
-      if(selectedYear === "2005"){
-        quantityRounds -= 11 //Onze rodadas foram anuladas devido a corrupção
-        console.log(quantityRounds)
+      if (selectedYear === "2005") {
+        quantityRounds -= 11; //Onze rodadas foram anuladas devido a corrupção
+        console.log(quantityRounds);
       }
       const lastRound = data.filter((round) => round.numero === quantityRounds);
       const teamsData = lastRound
@@ -69,7 +68,7 @@ export default function Home() {
         })
         .flat(2)
         .sort((a, b) => b.score.total_pontos - a.score.total_pontos);
-      
+
       setTeamsData(teamsData);
     })();
   }, [selectedYear]);
@@ -83,15 +82,23 @@ export default function Home() {
       </Head>
 
       <header className="flex flex-col h-20 text-center justify-center bg-blue-100">
-        <h1 className="font-semibold text-xl">React Campeonato Brasileiro 2003 - 2015</h1>
+        <h1 className="font-semibold text-xl">
+          React Campeonato Brasileiro 2003 - 2015
+        </h1>
       </header>
 
       <main className="container flex flex-col text-center items-center justify-center">
         <Select onSelectChange={handleChange}>{championshipYears}</Select>
+        <h2 className="font-semibold text-2xl">
+          Campeonato Brasileiro de {selectedYear}
+        </h2>
+        <h3 className="font-semibold text-xl">Classificação</h3>
         {teamsData && <ChampionshipTable>{teamsData}</ChampionshipTable>}
       </main>
       <footer className="flex h-20 items-end justify-end pr-3 pb-3">
-        <p className="font-semibold">&copy; {new Date().getFullYear()} Created by Gabriel Morais</p>
+        <p className="font-semibold">
+          &copy; {new Date().getFullYear()} Created by Gabriel Morais
+        </p>
       </footer>
     </div>
   );

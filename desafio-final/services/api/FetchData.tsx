@@ -1,5 +1,4 @@
-import axiosInstance, { AxiosResponse } from "axios";
-import { useQuery } from "react-query";
+import axiosInstance from "axios";
 
 export interface IMatch {
   visitante: string;
